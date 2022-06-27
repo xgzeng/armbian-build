@@ -69,7 +69,7 @@ jobs:
         with:
           delete_release: true
           repo: "armbian/mirror"
-          tag_name: "rootfs"
+          tag_name: "cache%2Frootfs"
         env:
           GITHUB_TOKEN: ${{ secrets.CR_PAT }}
 
@@ -78,7 +78,7 @@ jobs:
         with:
           artifacts: "rootfscache.version"
           repo: "mirror"
-          tag: "rootfs"
+          tag: "cache%2Frootfs"
           name: "Build in progress"
           bodyFile: "build/.github/Releases-wip.md"
           allowUpdates: true

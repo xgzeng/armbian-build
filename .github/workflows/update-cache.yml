@@ -78,7 +78,7 @@ jobs:
         with:
           artifacts: "rootfscache.version"
           repo: "mirror"
-          tag: cache\rootfs
+          tag: cache"/"rootfs
           name: "Build in progress"
           bodyFile: "build/.github/Releases-wip.md"
           allowUpdates: true

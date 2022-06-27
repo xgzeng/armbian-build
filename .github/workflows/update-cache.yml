@@ -224,28 +224,11 @@ jobs:
           sudo mountpoint -q build/cache/rootfs && sudo fusermount -u build/cache/rootfs || true
           sudo mountpoint -q build/cache/rootfs.upload && sudo fusermount -u build/cache/rootfs.upload || true
 
-  sync-servers:
-    permissions:
-      contents: none
-    name: "Sync servers"
-    needs: [release-start,x86-srv]
-    if: ${{ success() && github.repository_owner == 'Armbian' }}
-    uses: armbian/scripts/.github/workflows/sync-servers.yml@master
-
-    with:
-      KEY_ID: 'upload'
-
-    secrets:
-      KEY_UPLOAD: ${{ secrets.KEY_UPLOAD }}
-      USER_REPOSITORY: ${{ secrets.USER_REPOSITORY }}
-      HOST_REPOSITORY: ${{ secrets.HOST_REPOSITORY }}
-      KNOWN_HOSTS_REPOSITORY: ${{ secrets.KNOWN_HOSTS_REPOSITORY }}
-
   final-sync:
     permissions:
       contents: none
     name: "Sync servers"
-    needs: [sync-servers,jobsend]
+    needs: [jobsend]
     if: ${{ success() && github.repository_owner == 'Armbian' }}
     uses: armbian/scripts/.github/workflows/sync-servers.yml@master
 

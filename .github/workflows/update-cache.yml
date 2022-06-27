@@ -96,7 +96,7 @@ jobs:
     permissions:
       contents: none
     name: finish
-    needs: [x86-srv]
+    needs: [release-start,x86-srv]
     runs-on: [fast]
     if: ${{ github.repository_owner == 'Armbian' }}
     steps:

@@ -205,7 +205,7 @@ jobs:
 
           BRISI=($(diff <(find build/cache/rootfs.upload -name "*.lz4.current" | sed "s/.current//" | sort) <(find build/cache/rootfs.upload -name "*.lz4" | sort) | grep ">" | sed "s/> //"))
           for brisi in "${BRISI[@]}"; do
-              sudo rm $brisi            
+              sudo rm $brisi.*
           done
 
       - name: Unmount folders

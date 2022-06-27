@@ -77,7 +77,7 @@ jobs:
 
       variant: 'server:uefi-x86'
       monthoffset: ${{ inputs.monthoffset }}
-      rootfscache_version: ${{ env.ROOTFSCACHE_VERSION }}
+      rootfscache_version: ${{ needs.Prepare.outputs.rootfscache_version }}
 
     secrets:
       PAT1: ${{ secrets.CR_PAT }}
@@ -168,7 +168,7 @@ jobs:
           '
 
           # Update version
-          echo "${{ env.ROOTFSCACHE_VERSION }}" | sudo tee rootfscache.version
+          echo "${{ needs.Prepare.outputs.rootfscache_version }}" | sudo tee rootfscache.version
 
       - name: Upload
         uses: ncipollo/release-action@v1

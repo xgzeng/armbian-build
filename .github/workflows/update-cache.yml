@@ -39,6 +39,15 @@ jobs:
           path: build
           clean: false
 
+      - id: env-vars
+        name: Read current version
+        run:
+          
+          ROOTFSCACHE_VERSION=$(wget -O - -o /dev/null https://github.com/armbian/mirror/releases/download/cache/rootfscache.version)
+          ROOTFSCACHE_VERSION=$(( ROOTFSCACHE_VERSION + 1 ))          
+          echo "$ROOTFSCACHE_VERSION" | sudo tee rootfscache.version
+          echo ::set-output name=rootfscache_version::$(echo ${ROOTFSCACHE_VERSION:-"0"}) || true
+
       - uses: dev-drprasad/delete-tag-and-release@v0.2.0
         if: ${{ github.repository_owner == 'Armbian' }}
         with:
@@ -51,6 +60,7 @@ jobs:
       - name: Updating releases
         uses: ncipollo/release-action@v1
         with:
+          artifacts: "rootfscache.version"
           repo: "mirror"
           tag: "cache"
           name: "Build in progress"
@@ -58,14 +68,6 @@ jobs:
           allowUpdates: true
           removeArtifacts: true
           token: ${{ secrets.CR_PAT }}
-          
-      - id: env-vars
-        name: Read current version
-        run:
-          
-          ROOTFSCACHE_VERSION=$(wget -O - -o /dev/null https://github.com/armbian/mirror/releases/download/cache/rootfscache.version)
-          ROOTFSCACHE_VERSION=$(( VERSION + 1 ))
-          echo ::set-output name=rootfscache_version::$(echo ${ROOTFSCACHE_VERSION:-"0"}) || true
 
   x86-srv:
     needs: [release-start]

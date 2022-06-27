@@ -68,7 +68,7 @@ jobs:
         if: ${{ github.repository_owner == 'Armbian' }}
         with:
           delete_release: true
-          repo: "armbian/mirror"
+          repo: 'armbian/mirror'
           tag_name: "cache%2Frootfs"
         env:
           GITHUB_TOKEN: ${{ secrets.CR_PAT }}

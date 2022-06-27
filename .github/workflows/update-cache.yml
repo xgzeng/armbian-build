@@ -31,6 +31,15 @@ jobs:
       rootfscache_version: ${{ steps.env-vars.outputs.rootfscache_version }}
     if: ${{ github.repository_owner == 'Armbian' }}
     steps:
+    
+      - run: |
+          echo "not empty" > changes
+
+      - uses: actions/upload-artifact@v3
+        with:
+          path: changes
+          name: changes
+          if-no-files-found: ignore
 
       - name: Checkout repository
         uses: actions/checkout@v3

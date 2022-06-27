@@ -51,6 +51,7 @@ jobs:
           fi
           # remove true in sshfs when all runners are on jammy
           sudo rm build/cache/rootfs.upload/*.current
+          sudo mountpoint -q build/cache/rootfs.upload && sudo fusermount -u build/cache/rootfs.upload || true
 
       - id: env-vars
         name: Read current version

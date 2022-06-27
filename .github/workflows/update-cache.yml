@@ -1,11 +1,15 @@
 name: Build Rootfs Cache
 #
-# Generates rootfs cache and uploads it to https://github.com/armbian/mirror/releases/tag/_rootfs and https://dl.armbian.com/_rootfs/
+# Generates rootfs cache and uploads it to:
+#
+#     https://github.com/armbian/mirror/releases/tag/rootfs 
+#     https://cache.armbian.com/rootfs/
 #
 
 on:
   schedule:
-    - cron: "30 0 1 * *"
+      - cron: "30 0 1 * *" # Runs at 00:30 UTC on the 1st of every month.
+    
   push:
     branches:
       - 'master'
@@ -13,6 +17,7 @@ on:
       - 'config/distributions/**'
       - 'config/cli/**'
       - 'config/desktop/**'
+
   workflow_dispatch:
     inputs:
       monthoffset:
@@ -32,6 +37,7 @@ jobs:
     if: ${{ github.repository_owner == 'Armbian' }}
     steps:
     
+      # Synyching procedure expects this value
       - run: |
           echo "not empty" > changes
 
@@ -53,13 +59,15 @@ jobs:
           sudo mountpoint -q build/cache/rootfs.upload && sudo fusermount -u build/cache/rootfs.upload || true
           sudo apt-get -y -qq install sshfs
           sudo mkdir -p build/cache/rootfs.upload || true
+          
+          # locally mount via NFS
           if [[ $(curl -s http://ifconfig.me) == "93.103.15.56" ]]; then
               sudo mount nas:/tank/armbian/users.armbian.com/upload/rootfs build/cache/rootfs.upload
           else
               sudo sshfs upload@users.armbian.com:/rootfs build/cache/rootfs.upload -o IdentityFile=~/.ssh/id_rsa -o reconnect -o allow_other || true
           fi
           # remove true in sshfs when all runners are on jammy
-          #find build/cache/rootfs.upload -type f -not -name 'rootfscache.version' -print0 | xargs -0  -I {} sudo rm -v {} || true
+
           sudo rm build/cache/rootfs.upload/* || true
           sudo mountpoint -q build/cache/rootfs.upload && sudo fusermount -u build/cache/rootfs.upload || true
 

@@ -50,11 +50,7 @@ jobs:
               sudo sshfs upload@users.armbian.com:/rootfs build/cache/rootfs.upload -o IdentityFile=~/.ssh/id_rsa -o reconnect -o allow_other || true
           fi
           # remove true in sshfs when all runners are on jammy
-          sudo rm build/cache/rootfs.upload/*.current || true
-          sudo rm build/cache/rootfs.upload/*.torrent || true
-          sudo rm build/cache/rootfs.upload/*.asc || true
-          sudo rm build/cache/rootfs.upload/*.list || true
-          
+          find build/cache/rootfs.upload -type f -not -name 'rootfscache.version' -print0 | xargs -0  -I {} sudo rm -v {} || true
           sudo mountpoint -q build/cache/rootfs.upload && sudo fusermount -u build/cache/rootfs.upload || true
 
       - id: env-vars

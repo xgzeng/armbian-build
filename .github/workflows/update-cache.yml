@@ -28,7 +28,7 @@ jobs:
     name: Release start
     runs-on: [X64]
     outputs:
-      rootfscache_version: ${{ steps.env-vars.outputs.release-start }}
+      rootfscache_version: ${{ steps.env-vars.outputs.rootfscache_version }}
     if: ${{ github.repository_owner == 'Armbian' }}
     steps:
 
@@ -44,9 +44,9 @@ jobs:
         run:
           
           ROOTFSCACHE_VERSION=$(wget -O - -o /dev/null https://github.com/armbian/mirror/releases/download/cache/rootfscache.version)
-          ROOTFSCACHE_VERSION=$(( ROOTFSCACHE_VERSION + 1 ))          
+          ROOTFSCACHE_VERSION=$(( ${ROOTFSCACHE_VERSION:-"0"} + 1 ))
           echo "$ROOTFSCACHE_VERSION" | sudo tee rootfscache.version
-          echo ::set-output name=rootfscache_version::$(echo ${ROOTFSCACHE_VERSION:-"0"}) || true
+          echo ::set-output name=rootfscache_version::$(echo ${ROOTFSCACHE_VERSION}) || true
 
       - uses: dev-drprasad/delete-tag-and-release@v0.2.0
         if: ${{ github.repository_owner == 'Armbian' }}

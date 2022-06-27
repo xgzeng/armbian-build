@@ -41,10 +41,11 @@ jobs:
 
       - id: env-vars
         name: Read current version
-        run:
+        run: |
           
           ROOTFSCACHE_VERSION=$(wget -O - -o /dev/null https://github.com/armbian/mirror/releases/download/cache/rootfscache.version)
           ROOTFSCACHE_VERSION=$(( ${ROOTFSCACHE_VERSION:-"0"} + 1 ))
+          echo "${ROOTFSCACHE_VERSION}"
           echo "$ROOTFSCACHE_VERSION" | sudo tee rootfscache.version
           echo ::set-output name=rootfscache_version::$(echo ${ROOTFSCACHE_VERSION}) || true
 

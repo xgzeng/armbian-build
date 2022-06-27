@@ -58,7 +58,7 @@ jobs:
         name: Read current version
         run: |
           
-          ROOTFSCACHE_VERSION=$(wget --tries=10 -O - -o /dev/null https://github.com/armbian/mirror/releases/download/rootfs/rootfscache.version)
+          ROOTFSCACHE_VERSION=$(wget --tries=10 -O - -o /dev/null https://github.com/armbian/mirror/releases/download/rootfs/rootfscache.version || true)
           ROOTFSCACHE_VERSION=$(( ${ROOTFSCACHE_VERSION:-"0"} + 1 ))
           echo "${ROOTFSCACHE_VERSION}"
           echo "$ROOTFSCACHE_VERSION" | sudo tee rootfscache.version

@@ -119,7 +119,7 @@ jobs:
   jobsend:
     permissions:
       contents: none
-    name: finish
+    name: Release finish
     needs: [release-start,x86-srv]
     runs-on: [fast]
     if: ${{ github.repository_owner == 'Armbian' }}

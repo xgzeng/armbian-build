@@ -27,6 +27,8 @@ jobs:
       contents: none
     name: Release start
     runs-on: [X64]
+    outputs:
+      rootfscache_version: ${{ steps.env-vars.outputs.release-start }}
     if: ${{ github.repository_owner == 'Armbian' }}
     steps:
 
@@ -57,12 +59,13 @@ jobs:
           removeArtifacts: true
           token: ${{ secrets.CR_PAT }}
           
-      - name: Read current version
+      - id: env-vars
+        name: Read current version
         run:
           
           ROOTFSCACHE_VERSION=$(wget -O - -o /dev/null https://github.com/armbian/mirror/releases/download/cache/rootfscache.version)
           ROOTFSCACHE_VERSION=$(( VERSION + 1 ))
-          echo "ROOTFSCACHE_VERSION=${ROOTFSCACHE_VERSION:-0}" >> $GITHUB_ENV
+          echo ::set-output name=rootfscache_version::$(echo ${ROOTFSCACHE_VERSION:-"0"}) || true
 
   x86-srv:
     needs: [release-start]

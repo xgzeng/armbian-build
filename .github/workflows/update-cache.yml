@@ -203,7 +203,6 @@ jobs:
           '
 
           # Update version
-          echo  ${{ needs.release-start.outputs.rootfscache_version }}
           echo "${{ needs.release-start.outputs.rootfscache_version }}" | sudo tee rootfscache.version
 
       - name: Upload

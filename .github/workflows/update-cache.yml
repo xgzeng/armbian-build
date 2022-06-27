@@ -69,7 +69,7 @@ jobs:
         with:
           delete_release: true
           repo: 'armbian/mirror'
-          tag_name: "cache"
+          tag_name: "rootfs"
         env:
           GITHUB_TOKEN: ${{ secrets.CR_PAT }}
 
@@ -78,7 +78,7 @@ jobs:
         with:
           artifacts: "rootfscache.version"
           repo: "mirror"
-          tag: "cache"
+          tag: "rootfs"
           name: "Build in progress"
           bodyFile: "build/.github/Releases-wip.md"
           allowUpdates: true
@@ -170,9 +170,8 @@ jobs:
           sudo apt-get -y -qq install parallel buildtorrent
 
           ANNOUNCE=$(cat trackerslist/trackers_best_ip.txt | head -1)ANNOUNCE=$(cat trackerslist/trackers_best_ip.txt | sed '/^$/d' | shuf -n 1)
-          TRACKERS=$(cat trackerslist/trackers_all.txt | sed '/^\s*$/d' | while read line; do printf ",""${line}"; done | cut -c 2-)
-          #WEBSEEDS="--webseeds=https://github.com/armbian/mirror/releases/download/_rootfs/$FILE,https://imola.armbian.com/dl/_rootfs/$FILE,https://stpete-mirror.armbian.com/dl/_rootfs/$FILE"
-          WEBSEEDS="--webseeds="https://github.com/armbian/mirror/releases/download/cache/\$FILE,"$(curl -s https://cache.armbian.com/mirrors | jq -r '.'default' | .[] | values' | sed -e 's/$/\$FILE/' |  tr '\n' , | sed 's/.$//')"
+          TRACKERS=$(cat trackerslist/trackers_all.txt | sed '/^\s*$/d' | while read line; do printf ",""${line}"; done | cut -c 2-)          
+          WEBSEEDS="--webseeds="https://github.com/armbian/mirror/releases/download/rootfs/\$FILE,"$(curl -s https://cache.armbian.com/mirrors | jq -r '.'default' | .[] | values' | sed -e 's/$/\$FILE/' |  tr '\n' , | sed 's/.$//')"
           cd build/cache/rootfs.upload
 
           FILES=$(ls -1 *.lz4)

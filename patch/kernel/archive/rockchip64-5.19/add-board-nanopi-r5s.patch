@@ -3,7 +3,7 @@ new file mode 100644
 index 000000000000..5715ad0d5b2b
 --- /dev/null
 +++ b/arch/arm64/boot/dts/rockchip/rk3568-nanopi-r5s.dts
-@@ -0,0 +1,747 @@
+@@ -0,0 +1,749 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 +/*
 + * Copyright (c) 2021 FriendlyElec Computer Tech. Co., Ltd.
@@ -544,7 +544,9 @@ index 000000000000..5715ad0d5b2b
 +&sdhci {
 +	bus-width = <8>;
 +	no-sdio;
-+	no-sd;
++       no-sd;
++	assigned-clocks = <&cru BCLK_EMMC>, <&cru TCLK_EMMC>, <&cru CCLK_EMMC>;
++	assigned-clock-rates = <200000000>, <24000000>, <200000000>;
 +	non-removable;
 +	max-frequency = <200000000>;
 +	pinctrl-names = "default";

@@ -1,0 +1,45 @@
+diff --git a/arch/arm/mach-rockchip/sdram.c b/arch/arm/mach-rockchip/sdram.c
+index 705ec7ba6450..52974e6dc333 100644
+--- a/arch/arm/mach-rockchip/sdram.c
++++ b/arch/arm/mach-rockchip/sdram.c
+@@ -3,6 +3,8 @@
+  * Copyright (C) 2017 Rockchip Electronics Co., Ltd.
+  */
+
++#define DEBUG
++
+ #include <common.h>
+ #include <dm.h>
+ #include <init.h>
+@@ -98,8 +100,7 @@ size_t rockchip_sdram_size(phys_addr_t reg)
+ 			  SYS_REG_COL_MASK);
+ 		cs1_col = cs0_col;
+ 		bk = 3 - ((sys_reg2 >> SYS_REG_BK_SHIFT(ch)) & SYS_REG_BK_MASK);
+-		if ((sys_reg3 >> SYS_REG_VERSION_SHIFT &
+-		     SYS_REG_VERSION_MASK) == 0x2) {
++		if ((sys_reg3 >> SYS_REG_VERSION_SHIFT & SYS_REG_VERSION_MASK) >= 0x2) {
+ 			cs1_col = 9 + (sys_reg3 >> SYS_REG_CS1_COL_SHIFT(ch) &
+ 				  SYS_REG_CS1_COL_MASK);
+ 			if (((sys_reg3 >> SYS_REG_EXTEND_CS0_ROW_SHIFT(ch) &
+@@ -136,7 +137,7 @@ size_t rockchip_sdram_size(phys_addr_t reg)
+ 			SYS_REG_BW_MASK));
+ 		row_3_4 = sys_reg2 >> SYS_REG_ROW_3_4_SHIFT(ch) &
+ 			SYS_REG_ROW_3_4_MASK;
+-		if (dram_type == DDR4) {
++		if ((dram_type == DDR4) && (sys_reg3 >> SYS_REG_VERSION_SHIFT & SYS_REG_VERSION_MASK) != 0x3){
+ 			dbw = (sys_reg2 >> SYS_REG_DBW_SHIFT(ch)) &
+ 				SYS_REG_DBW_MASK;
+ 			bg = (dbw == 2) ? 2 : 1;
+@@ -176,9 +177,11 @@ size_t rockchip_sdram_size(phys_addr_t reg)
+ 	 *   2. update board_get_usable_ram_top() and dram_init_banksize()
+ 	 *   to reserve memory for peripheral space after previous update.
+ 	 */
++
++#ifndef __aarch64__
+ 	if (size_mb > (SDRAM_MAX_SIZE >> 20))
+ 		size_mb = (SDRAM_MAX_SIZE >> 20);
+-
++#endif
+ 	return (size_t)size_mb << 20;
+ }
+
